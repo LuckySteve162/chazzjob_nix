@@ -67,6 +67,19 @@
   # Core system services
   services.dbus.enable = true;
 
+  # Grafana
+
+  # Elastic Search
+  services.elastic = {
+    enable = truel;
+  };
+
+  # Logstash
+  service.logstash = {
+    service = enable;
+    logLevel = "warn";
+  };
+
   # System-wide packages
   environment.systemPackages = with pkgs; [
     # Core environment
@@ -74,7 +87,8 @@
 
     # UI / UX
 
-    # Clipboard
+    # Logging & Siem
+    #grafana logstash elasticsearch
 
     # Browser
     brave
