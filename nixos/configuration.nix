@@ -6,7 +6,7 @@
   ];
 
   # System identity
-  networking.hostName = "xenix";
+  networking.hostName = "xenix1";
   time.timeZone = "America/Chicago";
 
   # Networking
@@ -24,7 +24,6 @@
     nameservers = [ "1.1.1.1" ];
   };
 
-
   # Bootloader
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
@@ -39,25 +38,31 @@
 
   # User with sudo access
   users.users.luckyxen = {
-    isNormalUser = true;
-    extraGroups = [ 
-    "wheel" # For sudo
-    ]; 
-    packages = with pkgs; [  ];
+    isSystemUser = true;
+    initialPassword = "test";
   };
 
   # Graphics
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
 
+  # ly
+  services.displayManager = {
+    enable = true;
+    ly.settings = {
+      load = true;
+      save = true;
+    };
+    ly.enable = true;
+  }; 
+
   # Wayland environment
   programs.sway.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
+  programs.waybar.enable = true;
 
   environment.sessionVariables = {
     XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_CURRENT_DESKTOP = "sway";
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
     QT_QPA_PLATFORM = "wayland";
@@ -67,11 +72,17 @@
   # Core system services
   services.dbus.enable = true;
 
+  # Sunshine RDP
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+  }
+
   # Grafana
 
   # Elastic Search
   services.elastic = {
-    enable = truel;
+    enable = true;
   };
 
   # Logstash
@@ -90,6 +101,9 @@
     # Logging & Siem
     #grafana logstash elasticsearch
 
+    # Sunshine
+    sunshine
+
     # Browser
     brave
 
@@ -100,8 +114,6 @@
     neovim
 
     # Power & lock
-
-    # Networking
 
     # Utilities
     btop git stow ffmpeg
