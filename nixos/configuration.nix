@@ -4,31 +4,31 @@
   imports = [
     ./hardware-configuration.nix
     ./client.nix
+    ./virtualisation.nix
+    ./network.nix
+    ./env.nix
   ];
 
   # System identity
-  networking.hostName = "xenix1";
+  networking.hostName = "chazznix";
   time.timeZone = "America/Chicago";
-
-  # Networking
-  networking = {
-    useDHCP = true;
-    firewall = {
-      allowedTCPPorts = [ 
-        47984 47989 47990 48010 # For Sunshine RDP
-        ];
-      allowedUDPPorts = [ 
-        47998 47999 48000 48010 # For Sunshine RDP
-        ];
-    };
-    # DNS Management
-    nameservers = [ "1.1.1.1" ];
-  };
 
   # Bootloader
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
+
+  # PCI Passthrough
+  boot.kernelParams = [
+    "intel_iommu=on"
+    "iommu=pt"
+    "vfio-pci.ids="
+  ];
+  boot.initrd.kernelModules = [
+    "vfio_pci"
+    "vfio"
+    "vfio_iommu_type1"
+  ];
 
   # OpenSSH daemon
   services.openssh.enable = true;
@@ -39,8 +39,8 @@
 
   # User with sudo access
   users.users.luckysteve = {
-    isSystemUser = true;
-    initialPassword = "test";
+    isNormalUser = true;
+    extraGroups = [ "libvirtd" ];
   };
 
   # Graphics

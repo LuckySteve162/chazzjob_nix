@@ -17,7 +17,7 @@
   # System-wide packages
   environment.systemPackages = with pkgs; [
     # Core environment
-    sway wofi wezterm tmux ranger
+    sway wofi wezterm tmux ranger networkmanager
 
     # UI / UX
 
@@ -37,6 +37,9 @@
     neovim
 
     # Power & lock
+
+    # Virtualisation
+    libvirt virt-manager qemu qemu_kvm
 
     # Utilities
     btop git stow ffmpeg
